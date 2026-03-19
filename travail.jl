@@ -8,13 +8,13 @@
 #      github: meniamyriam-crypto
 #    - nom: Salman
 #      prenom: Assile
-#      matricule: XXXXXXXX
+#      matricule: 20268931
 #      github: salmanassile-crypto
 # ---
 
 # # Introduction
 # La succession végétale est un processus écologique au cours duquel la composition des communautés végétales évolue dans le temps.
-# Dans ce travail on utilise le code de la séance sur les modèles de transition végétale afin de simuler l'évolution de parcelles
+# Dans ce travail, on utilise le code de la séance sur les modèles de transition végétale afin de simuler l'évolution de parcelles
 # entre trois états : Barren (sol nu), Grasses (herbes) et Shrubs (arbustes). 
 # L'objectif est de simuler une intervention écologique et d'évaluer son efficacité en comparant le scénario de base à un scénario modifié. 
 
@@ -30,8 +30,6 @@
 import Random
 Random.seed!(123456)
 using CairoMakie
-
-using Distributions
 
 function check_transition_matrix!(T)
     for ligne in axes(T, 1)
@@ -120,11 +118,20 @@ f
 # Les résultats montrent que l’intervention accélère la transition vers les arbustes.
 # Les zones de sol nu diminuent plus rapidement comparativement au scénario de base.
 # On remarque également que la dynamique du système est plus rapide avec l’intervention.
-
+# La différence entre les deux scénarios devient de plus en plus marquée au fil des générations.
 
 # # Discussion
-# L’intervention simulée semble efficace pour accélérer la succession végétale vers un état dominé par les arbustes.
-# En augmentant les transitions vers les états végétalisés, on réduit la proportion de sol nu plus rapidement.
+
+# Les résultats obtenus montrent que l’intervention permet d’accélérer la succession végétale vers un état dominé par les arbustes.
+# En modifiant la matrice de transition, on favorise les passages du sol nu vers les herbes, puis des herbes vers les arbustes.
+# Cela induit une diminution plus rapide des parcelles de type Barren et une augmentation plus marquée des Shrubs au fil des générations.
+#
+# On observe également que l’écart entre le scénario de base et celui avec intervention devient de plus en plus important avec le temps,
+# ce qui suggère que les effets de l’intervention s’accumulent au cours des générations.
 #
 # Ce modèle reste simplifié et théorique car il ne prend pas en compte plusieurs facteurs écologiques tels que
-# les conditions environnementales, les perturbations ou les interactions entre espèces.
+# les conditions environnementales, les perturbations (feux, secheresse) ou les interactions entre espèces.
+# Mais en plus, les transitions sont sensées être constantes dans le temps, ce qui n’est pas réaliste dans un contexte naturel.
+#
+# Malgré ces limites, ce modèle permet de bien illustrer comment une intervention peut influencer la dynamique d’un écosystème
+# et met en avant l’importance des probabilités de transition dans l’évolution du système.
