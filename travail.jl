@@ -40,27 +40,17 @@ function check_transition_matrix!(T)
     return T
 end
 
-function simulation(transitions, states; generations=200)
-    check_transition_matrix!(transitions)
-    timeseries = zeros(Float64, length(states), generations + 1)
-    timeseries[:, 1] = states
-
-    for g in 1:generations
-        timeseries[:, g+1] = (timeseries[:, g]' * transitions)'
-    end
-
-    return timeseries
-end
+include("code/01_test.jl")
 
 # États initiaux
 s = [100, 0, 0]
 
 # Matrice de transition de base
-T = [
-    110 8 0;
-    2 120 3;
-    1 0 94
-]
+
+T = zeros(Float64, 3, 3)
+T[1, :] = [110, 8, 0]
+T[2, :] = [2, 120, 3]
+T[3, :] = [1, 0, 94]
 
 T2 = copy(T)
 
@@ -68,8 +58,8 @@ T2 = copy(T)
 T2[1, :] = [80, 38, 0]
 T2[2, :] = [1, 110, 14]
 
-sim_base = simulation(T, s)
-sim_intervention = simulation(T2, s)
+sim_base = simulation(T, s; stochastic=false, generations=200)
+sim_intervention = simulation(T2, s; stochastic=false, generations=200)
 
 # ## Inclure du code
 
