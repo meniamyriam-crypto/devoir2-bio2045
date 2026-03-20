@@ -31,15 +31,6 @@ import Random
 Random.seed!(123456)
 using CairoMakie
 
-function check_transition_matrix!(T)
-    for ligne in axes(T, 1)
-        if sum(T[ligne, :]) != 1
-            T[ligne, :] ./= sum(T[ligne, :])
-        end
-    end
-    return T
-end
-
 include("code/01_test.jl")
 
 # États initiaux
