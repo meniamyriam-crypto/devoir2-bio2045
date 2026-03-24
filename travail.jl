@@ -83,8 +83,8 @@ for i in 1:3
 end
 
 axislegend(ax)
-f
-
+save("travail-figure.png", f
+ 
 # Les résultats montrent que l’intervention accélère la transition vers les arbustes.
 # Les zones de sol nu diminuent plus rapidement comparativement au scénario de base.
 # On remarque également que la dynamique du système est plus rapide avec l’intervention.
