@@ -31,8 +31,27 @@ import Random
 Random.seed!(123456)
 using CairoMakie
 
-# Inclure le code fourni dans le dossier code
-include("code/01_test.jl")
+# Fonction pour normaliser la matrice
+function check_transition_matrix!(T)
+    for i in 1:size(T,1)
+        T[i, :] ./= sum(T[i, :])
+    end
+    return T
+end
+
+# Fonction de simulation 
+function simulation(T, s; generations=200)
+    check_transition_matrix!(T)
+
+    timeseries = zeros(Float64, length(s), generations + 1)
+    timeseries[:, 1] = s
+
+    for g in 1:generations
+        timeseries[:, g+1] = (timeseries[:, g]' * T)'
+    end
+
+    return timeseries
+end
 
 # États initiaux
 s = [100, 0, 0]
@@ -43,41 +62,28 @@ T[1, :] = [110, 8, 0]
 T[2, :] = [2, 120, 3]
 T[3, :] = [1, 0, 94]
 
-# Copie pour intervention
+# Intervention
 T2 = copy(T)
-
-# Intervention : favoriser la végétation
 T2[1, :] = [80, 38, 0]
 T2[2, :] = [1, 110, 14]
 
-# Simulations (fonction déjà fournie dans 01_test.jl)
+# Simulations
 sim_base = simulation(T, s)
 sim_intervention = simulation(T2, s)
 
-# ## Une autre section
-
-"""
-    foo(x, y)
-
-Cette fonction ne fait rien.
-"""
-function foo(x, y)
-    return nothing
-end
-
-# # Présentation des résultats
-
+# Graphique
 f = Figure()
 ax = Axis(f[1,1], xlabel="Générations", ylabel="Nombre de parcelles")
 
 colors = [:grey, :orange, :green]
+labels = ["Barren", "Grasses", "Shrubs"]
 
-# Simulation de base
+# Base
 for i in 1:3
-    lines!(ax, sim_base[i, :], color=colors[i], label="Base $i")
+    lines!(ax, sim_base[i, :], color=colors[i], label=labels[i])
 end
 
-# Simulation intervention
+# Intervention
 for i in 1:3
     lines!(ax, sim_intervention[i, :], color=colors[i], linestyle=:dash)
 end
@@ -85,6 +91,8 @@ end
 axislegend(ax)
 
 f
+
+save("travail-figure.png", f)
 
 # Les résultats montrent que l’intervention accélère la transition vers les arbustes.
 # Les zones de sol nu diminuent plus rapidement comparativement au scénario de base.
