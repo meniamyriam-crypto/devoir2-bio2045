@@ -50,7 +50,7 @@ T2 = copy(T)
 T2[1, :] = [80, 38, 0]
 T2[2, :] = [1, 110, 14]
 
-# Simulations
+# Simulations (fonction déjà fournie dans 01_test.jl)
 sim_base = simulation(T, s)
 sim_intervention = simulation(T2, s)
 
@@ -77,14 +77,15 @@ for i in 1:3
     lines!(ax, sim_base[i, :], color=colors[i], label="Base $i")
 end
 
-# Simulation intervention (pointillé)
+# Simulation intervention
 for i in 1:3
     lines!(ax, sim_intervention[i, :], color=colors[i], linestyle=:dash)
 end
 
 axislegend(ax)
-save("travail-figure.png", f
- 
+
+f
+
 # Les résultats montrent que l’intervention accélère la transition vers les arbustes.
 # Les zones de sol nu diminuent plus rapidement comparativement au scénario de base.
 # On remarque également que la dynamique du système est plus rapide avec l’intervention.
