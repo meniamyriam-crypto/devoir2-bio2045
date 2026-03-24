@@ -51,8 +51,8 @@ T2[1, :] = [80, 38, 0]
 T2[2, :] = [1, 110, 14]
 
 # Simulations
-sim_base = simulation(T, s; generations=200)
-sim_intervention = simulation(T2, s; generations=200)
+sim_base = simulation(T, s)
+sim_intervention = simulation(T2, s)
 
 # ## Une autre section
 
