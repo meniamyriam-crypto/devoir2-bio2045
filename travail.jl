@@ -31,68 +31,69 @@ import Random
 Random.seed!(123456)
 using CairoMakie
 
-# Fonction pour normaliser la matrice
-function check_transition_matrix!(T)
-    for i in 1:size(T,1)
-        T[i, :] ./= sum(T[i, :])
-    end
-    return T
-end
-
-# Fonction de simulation 
-function simulation(T, s; generations=200)
-    check_transition_matrix!(T)
-
-    timeseries = zeros(Float64, length(s), generations + 1)
-    timeseries[:, 1] = s
-
-    for g in 1:generations
-        timeseries[:, g+1] = (timeseries[:, g]' * T)'
-    end
-
-    return timeseries
-end
+include("code/01_test.jl")
 
 # États initiaux
 s = [100, 0, 0]
 
 # Matrice de transition de base
+
 T = zeros(Float64, 3, 3)
 T[1, :] = [110, 8, 0]
 T[2, :] = [2, 120, 3]
 T[3, :] = [1, 0, 94]
 
-# Intervention
 T2 = copy(T)
+
+# Intervention : favoriser la végétation
 T2[1, :] = [80, 38, 0]
 T2[2, :] = [1, 110, 14]
 
-# Simulations
-sim_base = simulation(T, s)
-sim_intervention = simulation(T2, s)
+sim_base = simulation(T, s; stochastic=false, generations=200)
+sim_intervention = simulation(T2, s; stochastic=false, generations=200)
 
-# Graphique
+# ## Inclure du code
+
+# Tous les fichiers dans le dossier `code` peuvent être ajoutés au travail
+# final. C'est par exemple utile pour déclarer l'ensemble des fonctions du
+# modèle hors du document principal.
+
+# Le contenu des fichiers est inclus avec `include("code/nom_fichier.jl")`.
+
+# Attention! Il faut que le code soit inclus au bon endroit (avant que les
+# fonctions déclarées soient appellées).
+
+# ## Une autre section
+
+"""
+    foo(x, y)
+
+Cette fonction ne fait rien.
+"""
+function foo(x, y)
+    ## Cette ligne est un commentaire
+    return nothing
+end
+
+# # Présentation des résultats
+
 f = Figure()
 ax = Axis(f[1,1], xlabel="Générations", ylabel="Nombre de parcelles")
 
 colors = [:grey, :orange, :green]
-labels = ["Barren", "Grasses", "Shrubs"]
 
-# Base
+# Simulation de base
 for i in 1:3
-    lines!(ax, sim_base[i, :], color=colors[i], label=labels[i])
+    lines!(ax, sim_base[i, :], color=colors[i], label="Base $i")
 end
 
-# Intervention
+# Simulation intervention (pointillé)
 for i in 1:3
     lines!(ax, sim_intervention[i, :], color=colors[i], linestyle=:dash)
 end
 
 axislegend(ax)
-
 f
-
-save("travail-figure.png", f)
 
 # Les résultats montrent que l’intervention accélère la transition vers les arbustes.
 # Les zones de sol nu diminuent plus rapidement comparativement au scénario de base.
