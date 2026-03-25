@@ -31,6 +31,26 @@ import Random
 Random.seed!(123456)
 using CairoMakie
 
+function check_transition_matrix!(T)
+    for i in 1:size(T,1)
+        T[i, :] ./= sum(T[i, :])
+    end
+    return T
+end
+
+function simulation(T, s; generations=200)
+    check_transition_matrix!(T)
+
+    timeseries = zeros(Float64, length(s), generations + 1)
+    timeseries[:, 1] = s
+
+    for g in 1:generations
+        timeseries[:, g+1] = (timeseries[:, g]' * T)'
+    end
+
+    return timeseries
+end
+
 include("code/01_test.jl")
 
 # États initiaux
@@ -94,6 +114,8 @@ end
 
 axislegend(ax)
 f
+
+save("travail-figure.png", f)
 
 # Les résultats montrent que l’intervention accélère la transition vers les arbustes.
 # Les zones de sol nu diminuent plus rapidement comparativement au scénario de base.
